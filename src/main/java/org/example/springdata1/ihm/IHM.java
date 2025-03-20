@@ -79,16 +79,13 @@ public class IHM implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
         int choice;
         do{
-            System.out.println("BUG");
             displayMenuAuthor();
             choice = scanner.nextInt();
             switch (choice){
                 case 1:
-                    System.out.println("Ajouter");
                     authorService.save(addAuthor());
                     break;
                 case 2:
-                    System.out.println("Liste");
                     afficheAuthors();
                     break;
                 case 3:
@@ -106,7 +103,12 @@ public class IHM implements CommandLineRunner {
                     }
                     break;
                 case 4:
-                    System.out.println("Supprimer");
+                    if (afficheAuthors()) {
+                        Scanner supp = new Scanner(System.in);
+                        System.out.println("Quel autheur supprimer : (id)");
+                        Long authId = (long) supp.nextInt();
+                        authorService.delete(authId);
+                    }
                     break;
                 case 0:
                     System.out.println("\n");
