@@ -18,6 +18,7 @@ public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
 
     public Long getId() {
         return id;
@@ -42,8 +43,6 @@ public class Genre {
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
-
-    private String name;
 
     @ManyToMany(mappedBy = "genres")
     private Set<Book> books = new HashSet<>();

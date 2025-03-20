@@ -26,13 +26,11 @@ public class IHM implements CommandLineRunner {
     @Autowired
     private GenreService genreService;
 
-
     @Override
     public void run(String... args) throws Exception {
         menu();
         System.exit(0);
     }
-
 
     private void menu(){
         Scanner scanner = new Scanner(System.in);
@@ -163,29 +161,39 @@ public class IHM implements CommandLineRunner {
             choice = scanner.nextInt();
             switch (choice){
                 case 1:
-                    System.out.println("Ajouter");
+                    genreService.save(addGenre());
                     break;
                 case 2:
-                    List<Genre> listeGenre = genreService.findAll();
-                    if(listeGenre.isEmpty()){
-                        System.out.println("Aucun author existant");
-                    }else {
-                        for(Genre genre : listeGenre){
-                            System.out.println(genre);
-                        }
-                    }
+                    System.out.println("Liste des genres :");
+                    afficheGenre();
                     break;
                 case 3:
-                    System.out.println("Modifier");
+                    if(afficheGenre()){
+                        Scanner modif = new Scanner(System.in);
+                        System.out.println("Quel genre modifier : (id)");
+                        Long genreId = (long) modif.nextInt();
+
+                        System.out.println("Quel nom ?");
+                        Scanner nom = new Scanner(System.in);
+                        Genre newGenre = new Genre();
+                        newGenre.setName(nom.nextLine());
+
+                        genreService.update(genreId, newGenre);
+                    }
                     break;
                 case 4:
-                    System.out.println("Supprimer");
+                    if(afficheGenre()){
+                        Scanner supp = new Scanner(System.in);
+                        System.out.println("Quel genre supprimer : (id)");
+                        Long genreId = (long) supp.nextInt();
+                        genreService.delete(genreId);
+                    }
                     break;
                 case 0:
-                    System.out.println("Bye bye!");
+                    System.out.println("\n");
                     break;
                 default:
-                    System.out.println("\n");
+                    System.out.println("Wrong choice !");
             }
 
         }while(choice!=0);
@@ -199,6 +207,29 @@ public class IHM implements CommandLineRunner {
         System.out.println("4. Supprimer un genre");
         System.out.println("0. Retour");
         System.out.println("Choisissez une option : ");
+    }
+
+    private Genre addGenre(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Nom du genre :");
+
+        String nom = scanner.nextLine();
+        Genre genre = new Genre();
+        genre.setName(nom);
+
+        return genre;
+    }
+
+    private boolean afficheGenre(){
+        List<Genre> listeGenre = genreService.findAll();
+        if(listeGenre.isEmpty()){
+            System.out.println("Aucun genre existant");
+            return false;
+        }
+        for(Genre genre : listeGenre){
+            System.out.println(genre);
+        }
+        return true;
     }
 
     private void menupublisher(){

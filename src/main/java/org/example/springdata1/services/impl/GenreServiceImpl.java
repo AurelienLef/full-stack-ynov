@@ -33,11 +33,14 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre update(Long id, Genre entity) {
-        return null;
+        Genre genre = genreRepository.findById(id).orElseThrow(() -> new RuntimeException("Genre not found"));
+        genre.setName(entity.getName());
+        return genreRepository.save(genre);
     }
 
     @Override
     public void delete(Long aLong) {
-
+        genreRepository.findById(aLong).orElseThrow(() -> new RuntimeException("Genre not found"));
+        genreRepository.deleteById(aLong);
     }
 }
